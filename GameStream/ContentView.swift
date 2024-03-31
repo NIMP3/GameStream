@@ -25,7 +25,7 @@ struct ContentView: View {
 }
 
 struct Authentication: View {
-    @State var isSignIn = true
+    @State var isSignIn = false
     
     var body: some View {
         VStack {
@@ -48,23 +48,33 @@ struct Authentication: View {
 }
  
 struct SignInView: View {
+    @State var email = ""
+    @State var password = ""
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                EmailField().padding(.bottom, 16 )
-                PasswordField().padding(.bottom, 16)
+                AuthField(title: "Email",
+                          isEmpty: email.isEmpty,
+                          placeholder: "example@example.com") {
+                    
+                    TextField("", text: $email)
+                }
+                
+                AuthField(title: "Password",
+                          isEmpty: password.isEmpty,
+                          placeholder: "Writing your password") {
+                    
+                    SecureField("", text: $password)
+                }
+            
                 Text("Did you forget your password?")
                     .font(.footnote)
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .foregroundStyle(Color("DarkCianColor"))
                     .padding(.bottom, 48)
                 
-                Button("SIGN IN", action: signIn)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .overlay(RoundedRectangle(cornerRadius: 10.0).stroke(Color("DarkCianColor"), lineWidth: 1.0).shadow(color: .white, radius: 6.0))
+                AuthPrimaryButton(title: "SIGN IN", action: signIn)
                     .padding(.bottom, 60)
                 
                 Text("Sign in with social networks")
@@ -73,20 +83,12 @@ struct SignInView: View {
                     .padding(.bottom, 12)
                 
                 HStack {
-                    Button("Facebook", action: {})
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color("SecondaryButtonColor"))
-                        .clipShape(RoundedRectangle(cornerRadius: 10.0))
-                    Text("Twitter")
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color("SecondaryButtonColor"))
-                        .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                    AuthSecondaryButton(title: "Facebook") {
+                        print("Sign in with Facebook")
+                    }
+                    AuthSecondaryButton(title: "Twitter") {
+                        print("Sign in with Twitter")
+                    }
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -100,43 +102,86 @@ func signIn() {
     print("Signing In..")
 }
 
-struct EmailField: View {
+struct SignUpView: View {
     @State var email = ""
+    @State var password = ""
+    @State var confirmPassword = ""
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Email").foregroundStyle(Color("DarkCianColor"))
-            ZStack(alignment: .leading) {
-                if (email.isEmpty) {
-                    Text(verbatim: "example@gmail.com").font(.caption).foregroundStyle(Color("HintColor"))
-                }
-                TextField("", text: $email)
+        ScrollView {
+            VStack(alignment: .center) {
+                Text("Choosing a profile photo")
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                
+                Text("You can change or choose later")
+                    .font(.footnote)
+                    .foregroundStyle(.white)
+                    .fontWeight(.light)
+                    .padding(.bottom)
+                
+                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                    ZStack {
+                        Image("ProfileImage")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 100, height: 100)
+                            .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                        
+                        Image(systemName: "camera")
+                            .foregroundColor(.white)
+                    }
+                })
             }
-            Divider().frame(height: 1).background(Color("DarkCianColor"))
+            
+            VStack(alignment: .leading) {
+                AuthField(title: "Email",
+                          isEmpty: email.isEmpty,
+                          placeholder: "example@example.com") {
+                    
+                    TextField("", text: $email)
+                }
+                
+                AuthField(title: "Password",
+                          isEmpty: password.isEmpty,
+                          placeholder: "Writing your password") {
+                    
+                    SecureField("", text: $password)
+                }
+                
+                AuthField(title: "Confirm password",
+                          isEmpty: password.isEmpty,
+                          placeholder: "Writing your password again") {
+                    
+                    SecureField("", text: $confirmPassword)
+                }.padding(.bottom, 12)
+                
+                AuthPrimaryButton(title: "SIGN UP", action: signUp)
+                    .padding(.bottom, 60)
+                
+                Text("Sign up with social networks")
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity,  alignment: .center)
+                    .padding(.bottom, 12)
+                
+                HStack {
+                    AuthSecondaryButton(title: "Facebook") {
+                        print("Sign in with Facebook")
+                    }
+                    AuthSecondaryButton(title: "Twitter") {
+                        print("Sign in with Twitter")
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .padding(24 )
         }
     }
 }
 
-struct PasswordField: View {
-    @State var password = ""
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("Password").foregroundStyle(.white)
-            ZStack(alignment: .leading) {
-                if (password.isEmpty) {
-                    Text("Writing your password").font(.caption).foregroundStyle(Color("HintColor"))
-                }
-                SecureField("", text: $password)
-            }
-            Divider().frame(height: 1).background(Color("DarkCianColor"))
-        }
-    }
-}
-
-struct SignUpView: View {
-    var body: some View {
-        Text("SignUP")
-    }
+func signUp() {
+    print("Signing up..")
 }
 
 #Preview("ContenView") {
