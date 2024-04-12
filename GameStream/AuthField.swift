@@ -28,6 +28,7 @@ struct AuthField<Content>: View where Content: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(title)
+                .fontWeight(.bold)
                 .foregroundColor(Color("DarkCianColor"))
             ZStack(alignment: .leading) {
                 if (isEmpty) {

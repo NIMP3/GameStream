@@ -17,12 +17,12 @@ struct AuthPrimaryButton: View {
     }
     
     var body: some View {
-        Button(title, action: signIn)
+        Button(title, action: action)
             .fontWeight(.bold)
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .padding()
-            .overlay(RoundedRectangle(cornerRadius: 10.0).stroke(Color("DarkCianColor"), lineWidth: 1.0).shadow(color: .white, radius: 6.0))
+            .overlay(RoundedRectangle(cornerRadius: 10.0).stroke(Color("DarkCianColor"), lineWidth: 1.5).shadow(color: .white, radius: 8.0))
     }
 }
 

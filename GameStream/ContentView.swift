@@ -9,34 +9,40 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        ZStack {
-            Spacer()
-            Color("BackgroundColor").ignoresSafeArea()
-            VStack {
-                Image("AppLogo")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 250)
-                    .padding(.bottom, 48)
-                Authentication()
-            }
+        NavigationStack {
+            ZStack {
+                Spacer()
+                Color("BackgroundColor").ignoresSafeArea()
+                VStack {
+                    Image("AppLogo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 250)
+                        .padding(.bottom, 48)
+                    Authentication()
+                }
+            }.toolbar(.hidden, for: .navigationBar)
         }
     }
 }
 
 struct Authentication: View {
-    @State var isSignIn = false
+    @State var isSignIn = true
     
     var body: some View {
         VStack {
             HStack {
-                Spacer()
                 Button("SIGN IN", action: { isSignIn = true })
                     .foregroundColor(isSignIn ? .white : .gray)
-                Spacer()
+                    .fontWeight(isSignIn ? .bold : .light)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                
                 Button("SIGN UP", action: { isSignIn = false })
                     .foregroundColor(isSignIn ? .gray : .white)
-                Spacer()
+                    .fontWeight(isSignIn ? .light : .bold)
+                    .frame(maxWidth: .infinity)
+                    .padding()
             }
             
             Spacer(minLength: 42)
@@ -50,6 +56,7 @@ struct Authentication: View {
 struct SignInView: View {
     @State var email = ""
     @State var password = ""
+    @State var isHomeViewActive = false 
     
     var body: some View {
         ScrollView {
@@ -94,12 +101,11 @@ struct SignInView: View {
             }
             .frame(minWidth: 0, maxWidth: .infinity)
             .padding(24 )
+            .navigationDestination(isPresented: $isHomeViewActive) { MenuView() }
         }
     }
-}
-
-func signIn() {
-    print("Signing In..")
+    
+    func signIn() { isHomeViewActive = true }
 }
 
 struct SignUpView: View {
@@ -129,7 +135,9 @@ struct SignUpView: View {
                             .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
                         
                         Image(systemName: "camera")
+                            .resizable()
                             .foregroundColor(.white)
+                            .frame(width: 40, height: 30)
                     }
                 })
             }
